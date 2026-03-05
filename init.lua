@@ -593,18 +593,19 @@ require('lazy').setup({
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --  See `:help lsp-config` for information about keys and how to configure
       local servers = {
-        -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
+        clangd = {},
+        gopls = {},
+        pyright = {},
+        ['rust-analyzer'] = {}, -- MUST have brackets and quotes
+        ['typescript-language-server'] = {}, -- Underscores are fine!
+        intelephense = {}, -- Fixed the merged name typo
+        ['svelte-language-server'] = {},
+        zls = {},
+        ['lua-language-server'] = {},
+        ['yaml-language-server'] = {},
+        ['motoko-lsp'] = {},
+        ['css-lsp'] = {},
       }
-
       -- Ensure the servers and tools above are installed
       --
       -- To check the current status of installed tools and/or manually install
@@ -614,12 +615,21 @@ require('lazy').setup({
       -- You can press `g?` for help in this menu.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'lua_ls', -- Lua Language server
+
         'stylua', -- Used to format Lua code
+        'clangd',
+        'gopls',
+        'pyright',
+        'rust-analyzer',
+        'typescript-language-server', -- Use THIS full name for Mason
+        'lua-language-server',
+        'svelte-language-server',
+        'motoko-lsp',
+        'css-lsp',
         -- You can add other tools here that you want Mason to install
       })
 
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+      -- require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       for name, server in pairs(servers) do
         server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
@@ -851,9 +861,19 @@ require('lazy').setup({
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    main = 'nvim-treesitter', -- Explicitly tell Lazy where the config is
+    build = ':TSUpdate',
     config = function()
       local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
-      require('nvim-treesitter').install(filetypes)
+      -- require('nvim-treesitter').install(filetypes)
+
+      -- Instead, use the standard setup call which is more "offline friendly"
+      require('nvim-treesitter').setup {
+        ensure_installed = filetypes,
+        auto_install = false, -- This is the key setting for offline use
+        highlight = { enable = true },
+      }
+
       vim.api.nvim_create_autocmd('FileType', {
         pattern = filetypes,
         callback = function() vim.treesitter.start() end,
@@ -888,6 +908,12 @@ require('lazy').setup({
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
 }, {
+  checker = {
+    enabled = false, -- This stops Neovim from checking GitHub for updates
+  },
+  change_detection = {
+    notify = false, -- This stops the "Config change detected" notifications
+  },
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
     -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
