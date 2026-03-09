@@ -91,7 +91,8 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+-- Install a Nerd Font from https://www.nerdfonts.com/ and set it in your terminal emulator
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -313,6 +314,8 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>b', group = '[B]uffer tabs' },
+        { '<leader>e', group = 'File [E]xplorer' },
       },
     },
   },
@@ -795,6 +798,152 @@ require('lazy').setup({
 
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },
+    },
+  },
+
+  -- =========================================================================
+  -- VSCode-like UI: File Explorer Sidebar (Neo-tree)
+  -- =========================================================================
+  {
+    'nvim-neo-tree/neo-tree.nvim',
+    version = '*',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-web-devicons',
+      'MunifTanjim/nui.nvim',
+    },
+    lazy = false,
+    keys = {
+      { '<C-b>',      '<cmd>Neotree toggle<CR>', desc = 'Toggle File Explorer (like VSCode Ctrl+B)' },
+      { '<leader>e',  '<cmd>Neotree focus<CR>',  desc = 'Focus File [E]xplorer' },
+      { '<leader>E',  '<cmd>Neotree reveal<CR>', desc = 'Reveal current file in [E]xplorer' },
+    },
+    opts = {
+      close_if_last_window = false,
+      popup_border_style = 'rounded',
+      enable_git_status = true,
+      enable_diagnostics = true,
+      default_component_configs = {
+        indent = {
+          indent_size = 2,
+          padding = 1,
+          with_markers = true,
+          indent_marker = '│',
+          last_indent_marker = '└',
+          with_expanders = true,
+          expander_collapsed = '',
+          expander_expanded = '',
+        },
+        icon = {
+          folder_closed = '',
+          folder_open  = '',
+          folder_empty = '',
+          default      = '',
+        },
+        modified   = { symbol = '●' },
+        git_status = {
+          symbols = {
+            added     = '',
+            modified  = '',
+            deleted   = '✖',
+            renamed   = '➜',
+            untracked = '',
+            ignored   = '◌',
+            unstaged  = '○',
+            staged    = '●',
+            conflict  = '',
+          },
+        },
+      },
+      window = {
+        position = 'left',
+        width = 35,
+        mapping_options = { noremap = true, nowait = true },
+        mappings = {
+          ['<space>'] = { 'toggle_node', nowait = false },
+          ['<cr>']    = 'open',
+          ['l']       = 'open',
+          ['h']       = 'close_node',
+          ['v']       = 'open_vsplit',
+          ['s']       = 'open_split',
+          ['t']       = 'open_tabnew',
+          ['a']       = { 'add', config = { show_path = 'relative' } },
+          ['d']       = 'delete',
+          ['r']       = 'rename',
+          ['c']       = 'copy',
+          ['m']       = 'move',
+          ['q']       = 'close_window',
+          ['R']       = 'refresh',
+          ['?']       = 'show_help',
+        },
+      },
+      filesystem = {
+        filtered_items = {
+          visible     = false,
+          hide_dotfiles   = false, -- show .env, .gitignore, etc.
+          hide_gitignored = true,
+        },
+        follow_current_file  = { enabled = true, leave_dirs_open = false },
+        use_libuv_file_watcher = true, -- auto-refresh on filesystem changes
+      },
+      buffers = {
+        follow_current_file = { enabled = true },
+      },
+    },
+  },
+
+  -- =========================================================================
+  -- VSCode-like UI: Tab Bar (bufferline) — open files as clickable tabs
+  -- =========================================================================
+  {
+    'akinsho/bufferline.nvim',
+    version = '*',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    event = 'VimEnter',
+    keys = {
+      { '<Tab>',   '<cmd>BufferLineCycleNext<CR>', desc = 'Next buffer tab' },
+      { '<S-Tab>', '<cmd>BufferLineCyclePrev<CR>', desc = 'Prev buffer tab' },
+      { '<A-1>',   '<cmd>BufferLineGoToBuffer 1<CR>', desc = 'Tab 1' },
+      { '<A-2>',   '<cmd>BufferLineGoToBuffer 2<CR>', desc = 'Tab 2' },
+      { '<A-3>',   '<cmd>BufferLineGoToBuffer 3<CR>', desc = 'Tab 3' },
+      { '<A-4>',   '<cmd>BufferLineGoToBuffer 4<CR>', desc = 'Tab 4' },
+      { '<A-5>',   '<cmd>BufferLineGoToBuffer 5<CR>', desc = 'Tab 5' },
+      { '<leader>x',  '<cmd>bdelete<CR>',          desc = 'Close current tab' },
+      { '<leader>X',  '<cmd>bdelete!<CR>',          desc = 'Force close current tab' },
+      { '<leader>bp', '<cmd>BufferLinePick<CR>',    desc = '[B]uffer [P]ick tab' },
+    },
+    opts = {
+      options = {
+        mode = 'buffers',
+        numbers = 'ordinal',
+        close_command        = 'bdelete! %d',
+        right_mouse_command  = 'bdelete! %d',
+        left_mouse_command   = 'buffer %d',
+        indicator            = { style = 'icon', icon = '▎' },
+        buffer_close_icon    = '✕',
+        modified_icon        = '●',
+        close_icon           = '✕',
+        diagnostics          = 'nvim_lsp',
+        diagnostics_indicator = function(count, level)
+          local icon = level:match 'error' and ' ' or ' '
+          return icon .. count
+        end,
+        -- Reserve space so bufferline does not overlap the Neo-tree sidebar
+        offsets = {
+          {
+            filetype   = 'neo-tree',
+            text       = '  File Explorer',
+            text_align = 'left',
+            separator  = true,
+          },
+        },
+        show_buffer_icons      = true,
+        show_buffer_close_icons = true,
+        show_close_icon        = false,
+        separator_style        = 'slant', -- 'slant' | 'thick' | 'thin'
+        always_show_bufferline = true,
+        hover = { enabled = true, delay = 200, reveal = { 'close' } },
+      },
     },
   },
 
