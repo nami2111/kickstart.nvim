@@ -1,4 +1,4 @@
-local api_key = vim.env.OPENAI_API_KEY or vim.env.OPENROUTER_API_KEY or vim.env.ANTHROPIC_API_KEY
+local api_key = vim.env.OPENAI_API_KEY or vim.env.OPENROUTER_API_KEY or vim.env.ANTHROPIC_API_KEY or vim.env.OPENCODE_API_KEY
 
 return {
   'yetone/avante.nvim',
@@ -19,16 +19,36 @@ return {
     { '<leader>ae', '<cmd>AvanteEdit<CR>',               desc = 'AI Edit',                    mode = 'v' },
     { '<leader>ar', '<cmd>AvanteRefresh<CR>',            desc = 'AI Refresh' },
     { '<leader>af', '<cmd>AvanteFind<CR>',               desc = 'AI Find File' },
-    { '<leader>as', '<cmd>AventeSwitchProvider<CR>',     desc = 'AI Switch Provider' },
+    { '<leader>as', '<cmd>AvanteSwitchProvider<CR>',     desc = 'AI Switch Provider' },
+    { '<leader>am', function() require('custom.opencode').pick_model() end,
+                                                          desc = 'AI Pick OpenCode Model' },
+    { '<leader>a?', function() require('custom.opencode').show_current() end,
+                                                          desc = 'AI Show Current Model' },
   },
   opts = {
     provider = 'openai',
     auto_suggestions_provider = 'openai',
-    openai = {
-      endpoint = 'https://openrouter.ai/api/v1',
-      model = 'openai/gpt-4o-mini',
-      temperature = 0,
-      max_tokens = 4096,
+    providers = {
+      openai = {
+        endpoint = 'https://openrouter.ai/api/v1',
+        model = 'openai/gpt-4o-mini',
+        timeout = 30000,
+        extra_request_body = {
+          temperature = 0,
+          max_tokens = 4096,
+        },
+      },
+      opencode = {
+        __inherited_from = 'openai',
+        api_key_name = 'OPENCODE_API_KEY',
+        endpoint = 'https://opencode.ai/zen/v1',
+        model = require('custom.opencode').get_saved_model() or 'opencode/big-pickle',
+        timeout = 30000,
+        extra_request_body = {
+          temperature = 0,
+          max_tokens = 4096,
+        },
+      },
     },
     behaviour = {
       auto_suggestions = false,
