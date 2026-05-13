@@ -15,7 +15,9 @@ return {
   },
   keys = {
     { '<leader>aa', '<cmd>AvanteChat<CR>',               desc = 'AI Chat (ask)' },
-    { '<leader>ac', '<cmd>AvanteCommit<CR>',             desc = 'AI Commit Message' },
+    { '<leader>ac', function()
+      require('avante.api').ask({ question = '/commit' })
+    end,                                                                  desc = 'AI Commit Message' },
     { '<leader>ae', '<cmd>AvanteEdit<CR>',               desc = 'AI Edit',                    mode = 'v' },
     { '<leader>an', '<cmd>AvanteNewChat<CR>',             desc = 'AI New Chat' },
     { '<leader>ar', '<cmd>AvanteRefresh<CR>',            desc = 'AI Refresh' },
@@ -61,5 +63,5 @@ return {
     _warn_no_key = api_key == nil,
   },
   -- Lazy-load on the avante commands
-  cmd = { 'AvanteChat', 'AvanteNewChat', 'AvanteCommit', 'AvanteEdit', 'AvanteRefresh', 'AvanteFind', 'AvanteSwitchProvider' },
+  cmd = { 'AvanteChat', 'AvanteNewChat', 'AvanteEdit', 'AvanteRefresh', 'AvanteFind', 'AvanteSwitchProvider' },
 }

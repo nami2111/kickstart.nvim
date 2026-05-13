@@ -1,4 +1,4 @@
-# Keymap Reference
+# Keymap Reference fo Neovim
 
 > Leader key: `<Space>`
 
