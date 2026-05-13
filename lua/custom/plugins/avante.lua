@@ -16,8 +16,8 @@ return {
   keys = {
     { '<leader>aa', '<cmd>AvanteChat<CR>',               desc = 'AI Chat (ask)' },
     { '<leader>ac', function()
-      require('avante.api').ask({ question = '/commit' })
-    end,                                                                  desc = 'AI Commit Message' },
+      require('avante.api').ask({ question = '/commit', floating = true })
+    end,                                                                  desc = 'AI Commit Message (type /commit)' },
     { '<leader>ae', '<cmd>AvanteEdit<CR>',               desc = 'AI Edit',                    mode = 'v' },
     { '<leader>an', '<cmd>AvanteNewChat<CR>',             desc = 'AI New Chat' },
     { '<leader>ar', '<cmd>AvanteRefresh<CR>',            desc = 'AI Refresh' },
