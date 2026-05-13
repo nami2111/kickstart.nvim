@@ -629,10 +629,15 @@ require('lazy').setup({
         'svelte-language-server',
         'motoko-lsp',
         'css-lsp',
+
+        -- Debug adapters for nvim-dap
+        'codelldb',
+        'delve',
+        'js-debug-adapter',
         -- You can add other tools here that you want Mason to install
       })
 
-      -- require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       for name, server in pairs(servers) do
         server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
@@ -1050,7 +1055,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
