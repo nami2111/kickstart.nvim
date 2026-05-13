@@ -17,6 +17,7 @@ return {
     { '<leader>aa', '<cmd>AvanteChat<CR>',               desc = 'AI Chat (ask)' },
     { '<leader>ac', '<cmd>AvanteCommit<CR>',             desc = 'AI Commit Message' },
     { '<leader>ae', '<cmd>AvanteEdit<CR>',               desc = 'AI Edit',                    mode = 'v' },
+    { '<leader>an', '<cmd>AvanteNewChat<CR>',             desc = 'AI New Chat' },
     { '<leader>ar', '<cmd>AvanteRefresh<CR>',            desc = 'AI Refresh' },
     { '<leader>af', '<cmd>AvanteFind<CR>',               desc = 'AI Find File' },
     { '<leader>as', '<cmd>AvanteSwitchProvider<CR>',     desc = 'AI Switch Provider' },
@@ -26,8 +27,9 @@ return {
                                                           desc = 'AI Show Current Model' },
   },
   opts = {
-    provider = 'openai',
-    auto_suggestions_provider = 'openai',
+    provider = 'opencode',
+    auto_suggestions_provider = 'opencode',
+    selector = { provider = 'telescope' },
     providers = {
       openai = {
         endpoint = 'https://openrouter.ai/api/v1',
@@ -59,5 +61,5 @@ return {
     _warn_no_key = api_key == nil,
   },
   -- Lazy-load on the avante commands
-  cmd = { 'AvanteChat', 'AvanteCommit', 'AvanteEdit', 'AvanteRefresh', 'AvanteFind', 'AvanteSwitchProvider' },
+  cmd = { 'AvanteChat', 'AvanteNewChat', 'AvanteCommit', 'AvanteEdit', 'AvanteRefresh', 'AvanteFind', 'AvanteSwitchProvider' },
 }
