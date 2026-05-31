@@ -101,7 +101,10 @@ function M.generate_and_commit()
             local commit_result = vim.fn.system('git commit -m ' .. vim.fn.shellescape(edited_message))
             if vim.v.shell_error == 0 then
               vim.notify('Committed successfully!', vim.log.levels.INFO)
-              vim.cmd('silent! Neogit refresh')
+              -- Refresh Neogit if loaded
+              if package.loaded['neogit'] then
+                require('neogit').refresh()
+              end
             else
               vim.notify('Commit failed: ' .. commit_result, vim.log.levels.ERROR)
             end
