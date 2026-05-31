@@ -94,6 +94,9 @@ vim.g.maplocalleader = ' '
 -- Install a Nerd Font from https://www.nerdfonts.com/ and set it in your terminal emulator
 vim.g.have_nerd_font = true
 
+-- Load API keys from shell environment
+vim.env.OPENCODE_API_KEY = vim.env.OPENCODE_API_KEY or os.getenv('OPENCODE_API_KEY')
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
