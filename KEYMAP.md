@@ -117,16 +117,32 @@
 
 ---
 
-## Git (Neogit)
+## Git (Neogit & Gitsigns)
 
 | Key | Action |
 |---|---|
 | `<leader>gg` | Open git panel |
 | `<leader>g<CR>` | Git commit |
+| `<leader>gm` | AI generate commit message |
 | `<leader>gL` | Git log |
 | `<leader>gP` | Git pull |
 | `<leader>gU` | Git push |
 | `<leader>gB` | Git branches |
+| `<leader>hs` | Stage hunk |
+| `<leader>hu` | Unstage hunk |
+| `<leader>hS` | Stage entire buffer |
+| `<leader>hr` | Reset hunk (discard changes) |
+| `<leader>hR` | Reset buffer (discard all) |
+| `<leader>hp` | Preview hunk diff |
+| `<leader>hd` | Diff against index |
+| `]c` / `[c` | Jump next/prev change |
+
+**In AI commit popup:**
+
+| Key | Action |
+|---|---|
+| `<leader>w` | Commit with message |
+| `:q` | Cancel |
 
 ---
 
@@ -144,27 +160,6 @@
 | `<leader>gin` | Notifications |
 | `<leader>gis` | Search GitHub |
 | `<leader>gig` | Gists |
-
----
-
-## AI (Avante)
-
-| Key | Action |
-|---|---|
-| `<leader>aa` | AI chat |
-| `<leader>ac` | Generate AI commit message |
-| `<leader>ae` | AI edit (visual selection) |
-| `<leader>ar` | AI refresh |
-| `<leader>af` | AI find file |
-| `<leader>as` | Switch AI provider (OpenRouter / Opencode) |
-| `<leader>am` | Pick OpenCode Zen model |
-
-### AI Providers
-
-| Provider | Endpoint | API Key Env Var |
-|---|---|---|
-| `openai` (default) | `https://openrouter.ai/api/v1` | `OPENROUTER_API_KEY` or `OPENAI_API_KEY` |
-| `opencode` | `https://opencode.ai/zen/v1` | `OPENCODE_API_KEY` |
 
 ---
 
